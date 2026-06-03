@@ -20,6 +20,50 @@ Password: SuperAdmin123!
 
 Antes de produccion cambia `TLALI_SUPERADMIN_PASSWORD` y `TLALI_JWT_SECRET`.
 
+## Ejecutar en local
+
+Supabase local usa Docker para levantar Postgres, Auth, API y Studio. Primero abre Docker Desktop y espera a que el motor este corriendo.
+
+```powershell
+npm install
+npx supabase start
+```
+
+Luego ejecuta el backend:
+
+```powershell
+cd tlali-back
+.\mvnw.cmd spring-boot:run
+```
+
+En otra terminal ejecuta el frontend:
+
+```powershell
+cd tlali-front
+npx --yes pnpm@10 install
+node_modules\.bin\vite.CMD --host 127.0.0.1
+```
+
+URLs:
+
+- Backend: `http://localhost:8080`
+- Frontend: `http://127.0.0.1:5173`
+- Supabase API local: `http://127.0.0.1:54321`
+- Supabase Studio local: `http://127.0.0.1:54323`
+- Supabase Postgres local: `localhost:54322`
+
+Para revisar el estado de Supabase:
+
+```powershell
+npx supabase status
+```
+
+Para apagar Supabase local:
+
+```powershell
+npx supabase stop
+```
+
 ## Clonar con submodulos
 
 ```powershell
