@@ -9,6 +9,17 @@ Este repo contiene la documentacion general, archivos de entorno de ejemplo, con
 - `tlali-back`: API REST en Spring Boot, Java 17 y Maven.
 - `tlali-front`: tablero web en React, Vite y Tailwind CSS.
 
+## Seguridad
+
+Tlali incluye login local con JWT, Google OAuth y un usuario superadmin inicial para desarrollo.
+
+```text
+Correo: superadmin@tlali.local
+Password: SuperAdmin123!
+```
+
+Antes de produccion cambia `TLALI_SUPERADMIN_PASSWORD` y `TLALI_JWT_SECRET`.
+
 ## Clonar con submodulos
 
 ```powershell
