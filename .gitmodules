@@ -1,0 +1,6 @@
+[submodule "tlali-back"]
+	path = tlali-back
+	url = https://github.com/NahumAgp/Tlali-Back.git
+[submodule "tlali-front"]
+	path = tlali-front
+	url = https://github.com/NahumAgp/Tlali-Front.git
