@@ -1,6 +1,6 @@
-# Tlali
+# Tlali Tlapixqui
 
-Repositorio general del proyecto Tlali, una plataforma web para monitoreo de invernadero inteligente.
+Repositorio general del proyecto Tlali Tlapixqui, una plataforma web para monitoreo inteligente de sensores ambientales y de suelo.
 
 Este repo contiene la documentacion general, archivos de entorno de ejemplo, configuraciones de Docker y referencias a los repos de backend y frontend como submodulos.
 
@@ -11,7 +11,7 @@ Este repo contiene la documentacion general, archivos de entorno de ejemplo, con
 
 ## Seguridad
 
-Tlali incluye login local con JWT, Google OAuth y un usuario superadmin inicial para desarrollo.
+Tlali Tlapixqui incluye login local con JWT, Google OAuth y un usuario superadmin inicial para desarrollo.
 
 ```text
 Correo: superadmin@tlali.local
