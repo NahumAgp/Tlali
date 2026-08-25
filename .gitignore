@@ -10,6 +10,14 @@ tlali-api/
 *.log
 **/*.log
 tmp/
+data/
+tlali-back/data/
+.codex-video-tools/
+video_analysis/
+video_tools/
+video_tools_sys/
+video_wheel_extract/
+video_wheels/
 .codex-remote-attachments/
 __pycache__/
 **/__pycache__/
