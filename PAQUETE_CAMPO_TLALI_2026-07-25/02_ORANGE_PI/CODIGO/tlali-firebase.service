@@ -1,0 +1,19 @@
+[Unit]
+Description=Sincronizador TLALI hacia Firebase Realtime Database
+After=network-online.target tlali-lora.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=orangepi
+Group=orangepi
+WorkingDirectory=/home/orangepi/tlali/orange-pi
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/orangepi/tlali/orange-pi/.venv/bin/python /home/orangepi/tlali/orange-pi/sincronizar_firebase.py --db /home/orangepi/tlali/orange-pi/datos/tlali.db --credencial /home/orangepi/tlali/credenciales/firebase-service-account.json --url https://tlali-5edc4-default-rtdb.firebaseio.com/ --intervalo 15 --lote 500
+Restart=always
+RestartSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,98 @@
+PANEL TLALI PARA DIVI
+=====================
+
+ARCHIVO QUE DEBES COPIAR
+------------------------
+TLALI_DASHBOARD_DIVI.html
+
+PASOS EN WORDPRESS / DIVI
+-------------------------
+1. En WordPress crea una página nueva llamada "Monitoreo TLALI".
+2. Ábrela con el constructor Divi.
+3. Agrega una sección normal.
+4. Agrega una fila de UNA sola columna.
+5. En la configuración de la fila:
+   - Diseño > Tamaño > Usar ancho de canalón personalizado: Sí
+   - Ancho de canalón: 1
+   - Ancho: 95 %
+   - Ancho máximo: 1400 px
+6. Inserta un módulo llamado "Código".
+7. Abre TLALI_DASHBOARD_DIVI.html en tu computadora.
+8. Selecciona TODO su contenido, cópialo y pégalo dentro del módulo Código.
+9. Guarda el módulo, guarda la página y pulsa "Salir del constructor visual".
+
+IMPORTANTE SOBRE FIREBASE
+-------------------------
+Este primer panel lee Firebase directamente desde el navegador. Para la prueba,
+Realtime Database debe permitir lectura pública en /tlali.
+
+Reglas temporales recomendadas:
+
+{
+  "rules": {
+    "tlali": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}
+
+Estas reglas permiten que la página vea los datos, pero solamente un cliente
+autenticado (la Orange Pi) puede escribir. Son reglas de demostración; deben
+reemplazarse por autenticación de usuarios antes de publicar el panel para uso real.
+
+QUÉ INCLUYE EL PANEL
+--------------------
+- Resumen general de los dos nodos.
+- Vista completa del invernadero con las 10 mediciones:
+  humedad y temperatura del suelo, conductividad, pH, N, P, K, humedad y
+  temperatura ambiental y luminosidad.
+- Gráficas diarias de humedad, temperatura y nutrientes NPK.
+- Vista de actuadores: agua aproximada en la cisterna principal, porcentaje de
+  nivel, pH, conductividad, TDS y los dos relés.
+- Gráficas diarias de litros disponibles, pH y TDS.
+- Alertas cuando valid=false en cualquier sensor.
+- Estado en línea según la última fecha recibida.
+- RSSI y SNR de LoRa.
+- Historial por día y variable.
+- Gráfica de cada variable.
+- Tabla con las últimas 25 lecturas del día.
+- Descarga del historial seleccionado como archivo CSV.
+- Actualización automática de la vista actual cada 10 segundos.
+
+CALCULO DE LA CISTERNA
+----------------------
+Los dos sensores ultrasónicos miden la misma cisterna:
+
+  Dimensiones: 5 m x 6 m x 3.5 m
+  Capacidad nominal: 105,000 litros
+  Distancia de vacío: 350 cm
+  Distancia de lleno medible: 19 cm
+
+La página obtiene el promedio de las dos distancias y lo convierte a litros y
+porcentaje. Si uno de los sensores falla, conserva temporalmente la estimación
+con el sensor que siga funcionando y muestra la alerta correspondiente.
+
+CALIBRACION DEL AGUA
+--------------------
+La página vuelve a mostrar los valores calculados de pH, conductividad y TDS.
+Usa la calibración pH 4/7/10 (1.33625, 1.10100 y 0.77400 V) y la referencia EC
+de 1413 µS/cm a 1.92760 V. Las señales crudas en voltios no se muestran.
+
+NOTA SOBRE "VARIAS PÁGINAS"
+---------------------------
+Las cuatro pantallas están dentro del mismo panel y cambian con pestañas y
+botones: Resumen, Invernadero, Actuadores e Historial. Esto evita copiar cuatro
+veces el código y funciona mejor dentro de Divi. Cada pantalla de nodo contiene
+sus datos y gráficas, y tiene un botón hacia su historial.
+
+SI APARECE "PERMISSION DENIED"
+------------------------------
+Firebase está bloqueando la lectura pública. Revisa que las reglas temporales de
+arriba estén publicadas y luego actualiza la página de WordPress.
+
+SI EL DISEÑO SE VE MUY ANGOSTO
+------------------------------
+Revisa que la fila de Divi use 95 % de ancho y máximo 1400 px. También puedes
+configurar la plantilla de la página como "Página en blanco" si no deseas mostrar
+el encabezado y el pie del tema.

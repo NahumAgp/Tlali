@@ -1,0 +1,63 @@
+LIMPIEZA AUTOMÁTICA DE SQLITE EN LA ORANGE PI
+==============================================
+
+Este instalador:
+- conserva 7 días de datos locales ya sincronizados;
+- elimina solamente filas con estado "enviado";
+- nunca elimina filas pendientes o con error;
+- se ejecuta diariamente alrededor de las 03:20;
+- trunca el archivo temporal WAL cuando SQLite lo permite.
+
+DESDE WINDOWS
+-------------
+Envía la carpeta orange-pi actualizada a la Orange Pi usando el mismo método SSH
+que utilizaste anteriormente. Los archivos nuevos son:
+
+  limpiar_sqlite.py
+  tlali-limpieza.service
+  tlali-limpieza.timer
+  instalar_limpieza_sqlite.sh
+
+EN LA ORANGE PI
+---------------
+Ejecuta:
+
+  cd /home/orangepi/tlali/orange-pi
+  chmod +x instalar_limpieza_sqlite.sh
+  ./instalar_limpieza_sqlite.sh
+
+COMPROBAR EL TEMPORIZADOR
+-------------------------
+
+  systemctl status tlali-limpieza.timer --no-pager
+  systemctl list-timers tlali-limpieza.timer --no-pager
+
+VER EL RESULTADO DE LA ÚLTIMA LIMPIEZA
+--------------------------------------
+
+  journalctl -u tlali-limpieza.service -n 40 --no-pager
+
+PROBAR SIN BORRAR
+-----------------
+
+  cd /home/orangepi/tlali/orange-pi
+  .venv/bin/python limpiar_sqlite.py --db datos/tlali.db --retener-dias 7 --simular
+
+EJECUTAR MANUALMENTE
+--------------------
+
+  sudo systemctl start tlali-limpieza.service
+  journalctl -u tlali-limpieza.service -n 40 --no-pager
+
+CAMBIAR LA RETENCIÓN
+--------------------
+Edita /etc/systemd/system/tlali-limpieza.service y cambia:
+
+  --retener-dias 7
+
+Después ejecuta:
+
+  sudo systemctl daemon-reload
+
+No se recomienda usar menos de 2 días, porque conservar algunos datos locales
+facilita diagnosticar fallas de comunicación.

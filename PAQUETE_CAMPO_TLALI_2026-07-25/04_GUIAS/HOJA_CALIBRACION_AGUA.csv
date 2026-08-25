@@ -1,0 +1,12 @@
+fecha_hora,sensor,modelo_o_etiqueta,patron_referencia,unidad_patron,temperatura_c,lectura_1_v,lectura_2_v,lectura_3_v,lectura_4_v,lectura_5_v,promedio_v,resultado_calculado,error,observaciones
+,pH,pH modulo desconocido,7.00,pH,,,,,,,,,,
+,pH,pH modulo desconocido,4.00,pH,,,,,,,,,,
+,pH,pH modulo desconocido,10.00,pH,,,,,,,,,,
+,TDS,TDS modulo desconocido,,,25,,,,,,,,,
+,TDS,TDS modulo desconocido,,,25,,,,,,,,,
+,DS18B20,DS18B20,temperatura referencia,C,,,,,,,,,,
+,Tanque 1,RCWL-1655,tanque vacio,cm,,,,,,,,,,
+,Tanque 1,RCWL-1655,tanque lleno,cm,,,,,,,,,,
+,Tanque 2,RCWL-1655,tanque vacio,cm,,,,,,,,,,
+,Tanque 2,RCWL-1655,tanque lleno,cm,,,,,,,,,,
+

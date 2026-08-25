@@ -1,0 +1,29 @@
+==================== WINDOWS POWERSHELL ====================
+
+scp "C:\Users\nahum\Tlali\tlali-firebase-orange-pi.zip" "C:\Users\nahum\Tlali\COMANDOS_INSTALAR_FIREBASE_ORANGE_PI.txt" orangepi@192.168.1.77:/home/orangepi/
+
+
+======================== ORANGE PI =========================
+
+cd /home/orangepi
+
+mkdir -p /home/orangepi/tlali-firebase-instalador
+
+unzip -o /home/orangepi/tlali-firebase-orange-pi.zip -d /home/orangepi/tlali-firebase-instalador
+
+cd /home/orangepi/tlali-firebase-instalador
+
+chmod +x instalar_firebase.sh
+
+./instalar_firebase.sh
+
+
+======================== VERIFICAR =========================
+
+systemctl status tlali-firebase.service --no-pager
+
+journalctl -u tlali-firebase.service -n 30 --no-pager
+
+cd /home/orangepi/tlali/orange-pi
+
+.venv/bin/python consultar_datos.py --ultimas 5

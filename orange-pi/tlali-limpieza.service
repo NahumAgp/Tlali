@@ -1,0 +1,16 @@
+[Unit]
+Description=Limpieza segura de telemetría TLALI confirmada en Firebase
+After=tlali-firebase.service
+
+[Service]
+Type=oneshot
+User=orangepi
+Group=orangepi
+WorkingDirectory=/home/orangepi/tlali/orange-pi
+ExecStart=/home/orangepi/tlali/orange-pi/.venv/bin/python /home/orangepi/tlali/orange-pi/limpiar_sqlite.py --db /home/orangepi/tlali/orange-pi/datos/tlali.db --retener-dias 7 --lote 5000
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+

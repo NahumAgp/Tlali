@@ -9,6 +9,11 @@ dist/
 tlali-api/
 *.log
 **/*.log
+tmp/
+.codex-remote-attachments/
+__pycache__/
+**/__pycache__/
+*.pyc
 
 .env
 .env.*

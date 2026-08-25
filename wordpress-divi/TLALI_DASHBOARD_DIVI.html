@@ -1,0 +1,1334 @@
+<!--
+  TLALI · Panel de monitoreo para un módulo "Código" de Divi.
+  Pega este archivo completo dentro de UN solo módulo Código.
+-->
+<div id="tlali-dashboard">
+  <div class="tlali-shell">
+    <header class="tlali-header">
+      <div class="tlali-brand">
+        <span class="tlali-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M39 8C23 9 13 17 11 30c8 1 15-2 20-10-3 9-9 15-18 18" />
+          </svg>
+        </span>
+        <div>
+          <p class="tlali-eyebrow">AGRICULTURA CONECTADA</p>
+          <h1>TLALI <span>Monitor</span></h1>
+        </div>
+      </div>
+      <div class="tlali-live-pill" id="tlali-global-status">
+        <span class="tlali-live-dot"></span>
+        <span>Conectando con Firebase…</span>
+      </div>
+    </header>
+
+    <nav class="tlali-nav" aria-label="Secciones del monitor">
+      <button class="tlali-nav-button is-active" data-view="resumen">Resumen</button>
+      <button class="tlali-nav-button" data-view="invernadero">Invernadero</button>
+      <button class="tlali-nav-button" data-view="actuadores">Actuadores</button>
+      <button class="tlali-nav-button" data-view="historial">Historial</button>
+    </nav>
+
+    <main>
+      <section class="tlali-view is-active" data-panel="resumen">
+        <div class="tlali-hero">
+          <div>
+            <p class="tlali-kicker">CENTRO DE CONTROL</p>
+            <h2>El estado de tu cultivo,<br><span>de un vistazo.</span></h2>
+            <p class="tlali-hero-copy">
+              Información recibida por LoRa y sincronizada desde la Orange Pi.
+            </p>
+          </div>
+          <div class="tlali-clock-card">
+            <span>Hora local</span>
+            <strong id="tlali-clock">--:--:--</strong>
+            <small id="tlali-date">Cargando fecha…</small>
+          </div>
+        </div>
+
+        <div class="tlali-section-title">
+          <div>
+            <p>ESTADO GENERAL</p>
+            <h3>Resumen del sistema</h3>
+          </div>
+          <button class="tlali-refresh" type="button" data-refresh>Actualizar ahora</button>
+        </div>
+
+        <div class="tlali-status-grid">
+          <article class="tlali-node-card" id="tlali-card-greenhouse">
+            <div class="tlali-card-head">
+              <span class="tlali-card-icon">⌁</span>
+              <span class="tlali-node-state" data-node-state="tlali-npk-01">Sin datos</span>
+            </div>
+            <p>NODO 01</p>
+            <h4>Invernadero</h4>
+            <div class="tlali-node-highlights">
+              <div><span>Humedad suelo</span><strong data-current="soilMoisturePct">—</strong></div>
+              <div><span>Temp. ambiente</span><strong data-current="airTemperatureC">—</strong></div>
+              <div><span>Luminosidad</span><strong data-current="lightLux">—</strong></div>
+            </div>
+            <footer>
+              <span data-errors="tlali-npk-01">Esperando sensores</span>
+              <time data-updated="tlali-npk-01">—</time>
+            </footer>
+            <button class="tlali-open-view" type="button" data-view-target="invernadero">
+              Ver todos los datos y gráficas →
+            </button>
+          </article>
+
+          <article class="tlali-node-card tlali-node-card--blue" id="tlali-card-actuators">
+            <div class="tlali-card-head">
+              <span class="tlali-card-icon">◉</span>
+              <span class="tlali-node-state" data-node-state="tlali-actuadores-01">Sin datos</span>
+            </div>
+            <p>NODO 02</p>
+            <h4>Actuadores</h4>
+            <div class="tlali-node-highlights">
+              <div><span>Agua estimada</span><strong data-current="cisternLiters">—</strong></div>
+              <div><span>pH del agua</span><strong data-current="waterPh">—</strong></div>
+              <div><span>TDS del agua</span><strong data-current="waterTdsPpm">—</strong></div>
+            </div>
+            <footer>
+              <span data-errors="tlali-actuadores-01">Esperando sensores</span>
+              <time data-updated="tlali-actuadores-01">—</time>
+            </footer>
+            <button class="tlali-open-view" type="button" data-view-target="actuadores">
+              Ver todos los datos y gráficas →
+            </button>
+          </article>
+
+          <article class="tlali-signal-card">
+            <div class="tlali-card-head">
+              <span class="tlali-card-icon">⌁</span>
+              <span class="tlali-mini-label">RADIO LORA</span>
+            </div>
+            <p>CALIDAD DE ENLACE</p>
+            <h4 id="tlali-signal-title">Esperando datos</h4>
+            <div class="tlali-signal-bars" id="tlali-signal-bars" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="tlali-signal-values">
+              <span>RSSI <strong id="tlali-rssi">—</strong></span>
+              <span>SNR <strong id="tlali-snr">—</strong></span>
+            </div>
+          </article>
+        </div>
+
+        <div id="tlali-alerts" class="tlali-alerts">
+          <span class="tlali-alert-icon">✓</span>
+          <div>
+            <strong>Comprobando sensores</strong>
+            <p>El monitor mostrará aquí cualquier sensor que reporte una falla.</p>
+          </div>
+        </div>
+
+        <div class="tlali-quick-links">
+          <button type="button" data-view-target="invernadero">
+            <small>PANTALLA 01</small>
+            <strong>Sustrato, ambiente y NPK</strong>
+            <span>10 mediciones actuales + gráficas</span>
+          </button>
+          <button type="button" data-view-target="actuadores">
+            <small>PANTALLA 02</small>
+            <strong>Agua y actuadores</strong>
+            <span>Litros estimados, pH, TDS y relés</span>
+          </button>
+          <button type="button" data-view-target="historial">
+            <small>PANTALLA 03</small>
+            <strong>Historial completo</strong>
+            <span>Consultar variables por fecha y descargar CSV</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="tlali-view" data-panel="invernadero">
+        <div class="tlali-page-heading">
+          <div>
+            <p>NODO 01 · TLALI-NPK-01</p>
+            <h2>Invernadero</h2>
+            <span>Sustrato, ambiente y luminosidad</span>
+          </div>
+          <div class="tlali-page-status" data-node-state="tlali-npk-01">Sin datos</div>
+        </div>
+
+        <div class="tlali-group-heading"><span></span><h3>Sustrato</h3></div>
+        <div class="tlali-metric-grid" id="tlali-greenhouse-soil"></div>
+
+        <div class="tlali-group-heading"><span></span><h3>Ambiente</h3></div>
+        <div class="tlali-metric-grid" id="tlali-greenhouse-air"></div>
+
+        <div class="tlali-group-heading"><span></span><h3>Tendencias de hoy</h3></div>
+        <div class="tlali-dashboard-charts">
+          <article class="tlali-mini-chart">
+            <div><p>HUMEDAD</p><h4>Suelo y ambiente</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-humidity"></canvas></div>
+          </article>
+          <article class="tlali-mini-chart">
+            <div><p>TEMPERATURA</p><h4>Suelo y ambiente</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-temperature"></canvas></div>
+          </article>
+          <article class="tlali-mini-chart tlali-mini-chart--wide">
+            <div><p>NUTRIENTES DEL SUSTRATO</p><h4>Nitrógeno, fósforo y potasio</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-npk"></canvas></div>
+          </article>
+        </div>
+
+        <div class="tlali-screen-actions">
+          <button type="button" data-history-node="tlali-npk-01">Abrir historial del invernadero →</button>
+          <button type="button" data-view-target="resumen">← Regresar al resumen</button>
+        </div>
+
+        <div class="tlali-detail-strip">
+          <span>Secuencia <strong data-meta="greenhouse-seq">—</strong></span>
+          <span>RSSI <strong data-meta="greenhouse-rssi">—</strong></span>
+          <span>SNR <strong data-meta="greenhouse-snr">—</strong></span>
+          <span>Última lectura <strong data-updated="tlali-npk-01">—</strong></span>
+        </div>
+      </section>
+
+      <section class="tlali-view" data-panel="actuadores">
+        <div class="tlali-page-heading">
+          <div>
+            <p>NODO 02 · TLALI-ACTUADORES-01</p>
+            <h2>Agua y actuadores</h2>
+            <span>Nivel promedio, calidad del agua y estado de relés</span>
+          </div>
+          <div class="tlali-page-status" data-node-state="tlali-actuadores-01">Sin datos</div>
+        </div>
+
+        <div class="tlali-group-heading"><span></span><h3>Lecturas</h3></div>
+        <div class="tlali-metric-grid" id="tlali-actuator-metrics"></div>
+
+        <div class="tlali-group-heading"><span></span><h3>Salidas</h3></div>
+        <div class="tlali-relay-grid">
+          <article class="tlali-relay-card" data-relay-card="relay1On">
+            <span class="tlali-relay-light"></span>
+            <div><small>RELÉ 1</small><strong data-relay="relay1On">Sin datos</strong></div>
+          </article>
+          <article class="tlali-relay-card" data-relay-card="relay2On">
+            <span class="tlali-relay-light"></span>
+            <div><small>RELÉ 2</small><strong data-relay="relay2On">Sin datos</strong></div>
+          </article>
+        </div>
+
+        <div class="tlali-group-heading"><span></span><h3>Tendencias de hoy</h3></div>
+        <div class="tlali-dashboard-charts">
+          <article class="tlali-mini-chart">
+            <div><p>CISTERNA PRINCIPAL</p><h4>Agua disponible · promedio de 2 sensores</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-tanks"></canvas></div>
+          </article>
+          <article class="tlali-mini-chart">
+            <div><p>CALIDAD DEL AGUA</p><h4>pH calculado</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-water-ph"></canvas></div>
+          </article>
+          <article class="tlali-mini-chart">
+            <div><p>CALIDAD DEL AGUA</p><h4>TDS calculado</h4></div>
+            <div class="tlali-mini-chart-canvas"><canvas id="tlali-chart-water-tds"></canvas></div>
+          </article>
+        </div>
+
+        <div class="tlali-screen-actions">
+          <button type="button" data-history-node="tlali-actuadores-01">Abrir historial de actuadores →</button>
+          <button type="button" data-view-target="resumen">← Regresar al resumen</button>
+        </div>
+
+        <div class="tlali-detail-strip">
+          <span>Secuencia <strong data-meta="actuator-seq">—</strong></span>
+          <span>RSSI <strong data-meta="actuator-rssi">—</strong></span>
+          <span>SNR <strong data-meta="actuator-snr">—</strong></span>
+          <span>Última lectura <strong data-updated="tlali-actuadores-01">—</strong></span>
+        </div>
+      </section>
+
+      <section class="tlali-view" data-panel="historial">
+        <div class="tlali-page-heading">
+          <div>
+            <p>REGISTRO EN FIREBASE</p>
+            <h2>Historial</h2>
+            <span>Una muestra por nodo y minuto</span>
+          </div>
+          <button class="tlali-export" id="tlali-export-csv" type="button">Descargar CSV</button>
+        </div>
+
+        <div class="tlali-history-controls">
+          <label>
+            <span>Nodo</span>
+            <select id="tlali-history-node">
+              <option value="tlali-npk-01">Invernadero</option>
+              <option value="tlali-actuadores-01">Actuadores</option>
+            </select>
+          </label>
+          <label>
+            <span>Variable</span>
+            <select id="tlali-history-variable"></select>
+          </label>
+          <label>
+            <span>Fecha almacenada (UTC)</span>
+            <input id="tlali-history-date" type="date">
+          </label>
+          <button id="tlali-load-history" type="button">Consultar</button>
+        </div>
+
+        <div class="tlali-chart-card">
+          <div class="tlali-chart-head">
+            <div>
+              <p id="tlali-chart-label">Selecciona una variable</p>
+              <h3 id="tlali-chart-value">—</h3>
+            </div>
+            <span id="tlali-history-count">0 registros</span>
+          </div>
+          <div class="tlali-chart-wrap">
+            <canvas id="tlali-history-chart"></canvas>
+          </div>
+          <div id="tlali-history-empty" class="tlali-history-empty">
+            Elige una fecha y pulsa “Consultar”.
+          </div>
+        </div>
+
+        <div class="tlali-table-card">
+          <div class="tlali-table-title">
+            <h3>Lecturas recientes del día</h3>
+            <span>Las horas se presentan en tu zona local</span>
+          </div>
+          <div class="tlali-table-scroll">
+            <table>
+              <thead><tr id="tlali-history-head"></tr></thead>
+              <tbody id="tlali-history-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="tlali-error-box" id="tlali-error-box" hidden>
+      <strong>No fue posible leer Firebase</strong>
+      <p id="tlali-error-message"></p>
+    </div>
+
+    <footer class="tlali-footer">
+      <span>TLALI · Tecnología para la tierra</span>
+      <span>Actualización automática cada <strong>10 segundos</strong></span>
+    </footer>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+  #tlali-dashboard {
+    --tlali-ink: #18352f;
+    --tlali-green: #1d6a55;
+    --tlali-green-2: #2f8a68;
+    --tlali-mint: #dff2e7;
+    --tlali-blue: #256b7a;
+    --tlali-sand: #f6f1e7;
+    --tlali-paper: #fffdf8;
+    --tlali-line: #dfe8e2;
+    --tlali-muted: #6c7f78;
+    --tlali-warn: #e5a93a;
+    --tlali-danger: #c9524f;
+    color: var(--tlali-ink);
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.45;
+  }
+
+  #tlali-dashboard * { box-sizing: border-box; }
+  #tlali-dashboard button,
+  #tlali-dashboard input,
+  #tlali-dashboard select { font: inherit; }
+
+  #tlali-dashboard .tlali-shell {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid rgba(24, 53, 47, .1);
+    border-radius: 28px;
+    background: var(--tlali-paper);
+    box-shadow: 0 26px 70px rgba(20, 57, 46, .12);
+  }
+
+  #tlali-dashboard .tlali-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 34px;
+    border-bottom: 1px solid var(--tlali-line);
+    background: rgba(255, 253, 248, .94);
+  }
+
+  #tlali-dashboard .tlali-brand { display: flex; align-items: center; gap: 14px; }
+  #tlali-dashboard .tlali-brand-mark {
+    display: grid; width: 48px; height: 48px; place-items: center;
+    border-radius: 15px; background: var(--tlali-green); color: white;
+  }
+  #tlali-dashboard .tlali-brand-mark svg { width: 31px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 3; }
+  #tlali-dashboard .tlali-brand p,
+  #tlali-dashboard .tlali-brand h1 { margin: 0; }
+  #tlali-dashboard .tlali-eyebrow { color: var(--tlali-green-2); font-size: 9px; font-weight: 800; letter-spacing: .18em; }
+  #tlali-dashboard .tlali-brand h1 { font: 800 22px/1 "Manrope", sans-serif; letter-spacing: -.04em; }
+  #tlali-dashboard .tlali-brand h1 span { color: var(--tlali-green-2); font-weight: 600; }
+
+  #tlali-dashboard .tlali-live-pill,
+  #tlali-dashboard .tlali-node-state,
+  #tlali-dashboard .tlali-page-status {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px;
+    border-radius: 999px; background: #eef2ef; color: var(--tlali-muted);
+    font-size: 12px; font-weight: 700;
+  }
+  #tlali-dashboard .tlali-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a59f; }
+  #tlali-dashboard .tlali-live-pill.is-online,
+  #tlali-dashboard .tlali-node-state.is-online,
+  #tlali-dashboard .tlali-page-status.is-online { color: #126145; background: #dff4e8; }
+  #tlali-dashboard .is-online .tlali-live-dot { background: #28a770; box-shadow: 0 0 0 5px rgba(40,167,112,.12); animation: tlali-pulse 1.8s infinite; }
+  #tlali-dashboard .tlali-node-state.is-stale,
+  #tlali-dashboard .tlali-page-status.is-stale { color: #8a621c; background: #fff1cf; }
+  @keyframes tlali-pulse { 50% { box-shadow: 0 0 0 8px rgba(40,167,112,0); } }
+
+  #tlali-dashboard .tlali-nav {
+    display: flex; gap: 8px; padding: 10px 34px;
+    border-bottom: 1px solid var(--tlali-line); background: #fbfaf5;
+  }
+  #tlali-dashboard .tlali-nav-button {
+    border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer;
+    color: var(--tlali-muted); background: transparent; font-weight: 700; transition: .2s ease;
+  }
+  #tlali-dashboard .tlali-nav-button:hover { color: var(--tlali-green); background: var(--tlali-mint); }
+  #tlali-dashboard .tlali-nav-button.is-active { color: white; background: var(--tlali-green); }
+  #tlali-dashboard .tlali-view { display: none; padding: 36px 34px 40px; }
+  #tlali-dashboard .tlali-view.is-active { display: block; animation: tlali-fade .25s ease; }
+  @keyframes tlali-fade { from { opacity: 0; transform: translateY(4px); } }
+
+  #tlali-dashboard .tlali-hero {
+    display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: end;
+    margin: -36px -34px 34px; padding: 54px 50px;
+    color: white; background:
+      radial-gradient(circle at 83% 20%, rgba(130,207,162,.22), transparent 27%),
+      linear-gradient(120deg, #163d35 0%, #205e4d 62%, #2d765c 100%);
+  }
+  #tlali-dashboard .tlali-kicker,
+  #tlali-dashboard .tlali-hero h2,
+  #tlali-dashboard .tlali-hero-copy { margin: 0; }
+  #tlali-dashboard .tlali-kicker { margin-bottom: 10px; color: #94d8b3; font-size: 11px; font-weight: 800; letter-spacing: .18em; }
+  #tlali-dashboard .tlali-hero h2 { font: 700 clamp(30px, 4vw, 48px)/1.08 "Manrope", sans-serif; letter-spacing: -.045em; }
+  #tlali-dashboard .tlali-hero h2 span { color: #a6deb9; }
+  #tlali-dashboard .tlali-hero-copy { max-width: 590px; margin-top: 14px; color: rgba(255,255,255,.72); }
+  #tlali-dashboard .tlali-clock-card {
+    min-width: 195px; padding: 20px 24px; border: 1px solid rgba(255,255,255,.18);
+    border-radius: 18px; background: rgba(255,255,255,.08); backdrop-filter: blur(8px);
+  }
+  #tlali-dashboard .tlali-clock-card span,
+  #tlali-dashboard .tlali-clock-card small { display: block; color: rgba(255,255,255,.65); }
+  #tlali-dashboard .tlali-clock-card strong { display: block; margin: 4px 0; font: 700 29px "Manrope", sans-serif; }
+
+  #tlali-dashboard .tlali-section-title,
+  #tlali-dashboard .tlali-page-heading,
+  #tlali-dashboard .tlali-chart-head,
+  #tlali-dashboard .tlali-table-title {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  #tlali-dashboard .tlali-section-title { margin-bottom: 18px; }
+  #tlali-dashboard .tlali-section-title p,
+  #tlali-dashboard .tlali-section-title h3,
+  #tlali-dashboard .tlali-page-heading p,
+  #tlali-dashboard .tlali-page-heading h2,
+  #tlali-dashboard .tlali-page-heading span { margin: 0; }
+  #tlali-dashboard .tlali-section-title p,
+  #tlali-dashboard .tlali-page-heading p {
+    color: var(--tlali-green-2); font-size: 10px; font-weight: 800; letter-spacing: .15em;
+  }
+  #tlali-dashboard .tlali-section-title h3 { margin-top: 3px; font: 700 23px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-refresh,
+  #tlali-dashboard .tlali-export,
+  #tlali-dashboard #tlali-load-history {
+    border: 1px solid var(--tlali-line); border-radius: 11px; padding: 10px 15px;
+    cursor: pointer; color: var(--tlali-green); background: white; font-weight: 700;
+  }
+  #tlali-dashboard .tlali-refresh:hover,
+  #tlali-dashboard .tlali-export:hover { border-color: var(--tlali-green); }
+
+  #tlali-dashboard .tlali-status-grid {
+    display: grid; grid-template-columns: 1fr 1fr .8fr; gap: 18px;
+  }
+  #tlali-dashboard .tlali-node-card,
+  #tlali-dashboard .tlali-signal-card {
+    padding: 22px; border: 1px solid var(--tlali-line); border-radius: 20px; background: white;
+    box-shadow: 0 10px 30px rgba(22,61,53,.05);
+  }
+  #tlali-dashboard .tlali-node-card { border-top: 4px solid var(--tlali-green-2); }
+  #tlali-dashboard .tlali-node-card--blue { border-top-color: var(--tlali-blue); }
+  #tlali-dashboard .tlali-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  #tlali-dashboard .tlali-card-icon {
+    display: grid; width: 38px; height: 38px; place-items: center;
+    border-radius: 11px; color: var(--tlali-green); background: var(--tlali-mint); font-weight: 800;
+  }
+  #tlali-dashboard .tlali-node-card > p,
+  #tlali-dashboard .tlali-signal-card > p {
+    margin: 18px 0 2px; color: var(--tlali-muted); font-size: 10px; font-weight: 800; letter-spacing: .14em;
+  }
+  #tlali-dashboard .tlali-node-card h4,
+  #tlali-dashboard .tlali-signal-card h4 { margin: 0 0 18px; font: 700 23px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-node-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+  #tlali-dashboard .tlali-node-highlights div { min-width: 0; padding: 12px; border-radius: 12px; background: #f5f8f5; }
+  #tlali-dashboard .tlali-node-highlights span,
+  #tlali-dashboard .tlali-node-highlights strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #tlali-dashboard .tlali-node-highlights span { margin-bottom: 3px; color: var(--tlali-muted); font-size: 10px; }
+  #tlali-dashboard .tlali-node-highlights strong { font: 700 17px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-node-card footer {
+    display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid var(--tlali-line); color: var(--tlali-muted); font-size: 11px;
+  }
+  #tlali-dashboard .tlali-node-card footer span { font-weight: 700; }
+  #tlali-dashboard .tlali-node-card footer .has-error { color: var(--tlali-danger); }
+  #tlali-dashboard .tlali-open-view {
+    width: 100%; margin-top: 13px; padding: 11px 13px; border: 0; border-radius: 11px;
+    cursor: pointer; color: white; background: var(--tlali-green); font-weight: 800;
+    transition: transform .2s ease, background .2s ease;
+  }
+  #tlali-dashboard .tlali-node-card--blue .tlali-open-view { background: var(--tlali-blue); }
+  #tlali-dashboard .tlali-open-view:hover { transform: translateY(-1px); background: var(--tlali-green-2); }
+  #tlali-dashboard .tlali-mini-label { color: var(--tlali-muted); font-size: 10px; font-weight: 800; }
+  #tlali-dashboard .tlali-signal-bars { display: flex; height: 48px; align-items: end; gap: 6px; margin: 12px 0; }
+  #tlali-dashboard .tlali-signal-bars i { width: 12px; border-radius: 4px 4px 2px 2px; background: #dce7e1; }
+  #tlali-dashboard .tlali-signal-bars i:nth-child(1) { height: 20%; }
+  #tlali-dashboard .tlali-signal-bars i:nth-child(2) { height: 40%; }
+  #tlali-dashboard .tlali-signal-bars i:nth-child(3) { height: 60%; }
+  #tlali-dashboard .tlali-signal-bars i:nth-child(4) { height: 80%; }
+  #tlali-dashboard .tlali-signal-bars i:nth-child(5) { height: 100%; }
+  #tlali-dashboard .tlali-signal-bars i.is-on { background: var(--tlali-green-2); }
+  #tlali-dashboard .tlali-signal-values { display: flex; gap: 18px; color: var(--tlali-muted); font-size: 11px; }
+  #tlali-dashboard .tlali-signal-values strong { color: var(--tlali-ink); }
+
+  #tlali-dashboard .tlali-alerts {
+    display: flex; align-items: center; gap: 14px; margin-top: 18px; padding: 16px 18px;
+    border: 1px solid #cce6d6; border-radius: 15px; background: #edf8f1;
+  }
+  #tlali-dashboard .tlali-alerts.has-error { border-color: #f0cbc8; background: #fff0ee; }
+  #tlali-dashboard .tlali-alert-icon {
+    display: grid; flex: 0 0 34px; width: 34px; height: 34px; place-items: center;
+    border-radius: 50%; color: white; background: var(--tlali-green-2); font-weight: 800;
+  }
+  #tlali-dashboard .has-error .tlali-alert-icon { background: var(--tlali-danger); }
+  #tlali-dashboard .tlali-alerts strong,
+  #tlali-dashboard .tlali-alerts p { margin: 0; }
+  #tlali-dashboard .tlali-alerts p { color: var(--tlali-muted); font-size: 12px; }
+  #tlali-dashboard .tlali-quick-links {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 18px;
+  }
+  #tlali-dashboard .tlali-quick-links button {
+    min-width: 0; padding: 17px; border: 1px solid var(--tlali-line); border-radius: 15px;
+    cursor: pointer; text-align: left; color: var(--tlali-ink); background: white;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  #tlali-dashboard .tlali-quick-links button:hover {
+    border-color: var(--tlali-green-2); transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(22,61,53,.08);
+  }
+  #tlali-dashboard .tlali-quick-links small,
+  #tlali-dashboard .tlali-quick-links strong,
+  #tlali-dashboard .tlali-quick-links span { display: block; }
+  #tlali-dashboard .tlali-quick-links small { color: var(--tlali-green-2); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  #tlali-dashboard .tlali-quick-links strong { margin: 5px 0 3px; font: 700 15px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-quick-links span { overflow: hidden; color: var(--tlali-muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+
+  #tlali-dashboard .tlali-page-heading {
+    margin: -36px -34px 32px; padding: 38px 42px; color: white;
+    background: linear-gradient(120deg, #183f36, #2f7158);
+  }
+  #tlali-dashboard .tlali-page-heading h2 { margin: 4px 0 3px; font: 700 clamp(28px,4vw,40px) "Manrope", sans-serif; letter-spacing: -.04em; }
+  #tlali-dashboard .tlali-page-heading > div > span { color: rgba(255,255,255,.68); }
+  #tlali-dashboard .tlali-page-heading p { color: #9dd7b3; }
+  #tlali-dashboard .tlali-page-heading .tlali-page-status { color: rgba(255,255,255,.75); background: rgba(255,255,255,.1); }
+  #tlali-dashboard .tlali-page-heading .tlali-page-status.is-online { color: #dffbec; background: rgba(101,220,154,.18); }
+
+  #tlali-dashboard .tlali-group-heading { display: flex; align-items: center; gap: 10px; margin: 26px 0 14px; }
+  #tlali-dashboard .tlali-group-heading span { width: 5px; height: 22px; border-radius: 4px; background: var(--tlali-green-2); }
+  #tlali-dashboard .tlali-group-heading h3 { margin: 0; font: 700 18px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
+  #tlali-dashboard .tlali-metric-card {
+    position: relative; min-height: 144px; padding: 18px; overflow: hidden;
+    border: 1px solid var(--tlali-line); border-radius: 17px; background: white;
+  }
+  #tlali-dashboard .tlali-metric-card::after {
+    content: ""; position: absolute; right: -26px; bottom: -32px; width: 86px; height: 86px;
+    border-radius: 50%; background: var(--tlali-mint); opacity: .7;
+  }
+  #tlali-dashboard .tlali-metric-card small { display: block; color: var(--tlali-muted); font-weight: 700; }
+  #tlali-dashboard .tlali-metric-value { display: block; margin: 12px 0 7px; font: 800 27px "Manrope", sans-serif; letter-spacing: -.03em; }
+  #tlali-dashboard .tlali-metric-status { display: inline-flex; gap: 5px; align-items: center; color: #197452; font-size: 10px; font-weight: 800; }
+  #tlali-dashboard .tlali-metric-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  #tlali-dashboard .tlali-metric-status.is-error { color: var(--tlali-danger); }
+  #tlali-dashboard .tlali-detail-strip {
+    display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 26px; padding: 15px 18px;
+    border-radius: 13px; color: var(--tlali-muted); background: #eef3ef; font-size: 11px;
+  }
+  #tlali-dashboard .tlali-detail-strip strong { color: var(--tlali-ink); }
+  #tlali-dashboard .tlali-dashboard-charts {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;
+  }
+  #tlali-dashboard .tlali-mini-chart {
+    min-width: 0; padding: 18px; border: 1px solid var(--tlali-line); border-radius: 17px;
+    background: white; box-shadow: 0 8px 25px rgba(22,61,53,.045);
+  }
+  #tlali-dashboard .tlali-mini-chart--wide { grid-column: 1 / -1; }
+  #tlali-dashboard .tlali-mini-chart p,
+  #tlali-dashboard .tlali-mini-chart h4 { margin: 0; }
+  #tlali-dashboard .tlali-mini-chart p {
+    color: var(--tlali-green-2); font-size: 9px; font-weight: 800; letter-spacing: .12em;
+  }
+  #tlali-dashboard .tlali-mini-chart h4 { margin-top: 2px; font: 700 16px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-mini-chart-canvas { position: relative; height: 245px; margin-top: 13px; }
+  #tlali-dashboard .tlali-screen-actions {
+    display: flex; justify-content: space-between; gap: 12px; margin-top: 18px;
+  }
+  #tlali-dashboard .tlali-screen-actions button {
+    padding: 11px 15px; border: 1px solid var(--tlali-line); border-radius: 11px;
+    cursor: pointer; color: var(--tlali-green); background: white; font-weight: 800;
+  }
+  #tlali-dashboard .tlali-screen-actions button:first-child { border-color: var(--tlali-green); color: white; background: var(--tlali-green); }
+
+  #tlali-dashboard .tlali-relay-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  #tlali-dashboard .tlali-relay-card {
+    display: flex; align-items: center; gap: 14px; padding: 20px;
+    border: 1px solid var(--tlali-line); border-radius: 17px; background: white;
+  }
+  #tlali-dashboard .tlali-relay-light { width: 18px; height: 18px; border-radius: 50%; background: #a8b4b0; box-shadow: 0 0 0 7px #edf0ef; }
+  #tlali-dashboard .tlali-relay-card.is-on .tlali-relay-light { background: #28a770; box-shadow: 0 0 0 7px #dff4e8, 0 0 18px rgba(40,167,112,.5); }
+  #tlali-dashboard .tlali-relay-card small,
+  #tlali-dashboard .tlali-relay-card strong { display: block; }
+  #tlali-dashboard .tlali-relay-card small { color: var(--tlali-muted); font-weight: 800; }
+  #tlali-dashboard .tlali-relay-card strong { margin-top: 2px; font: 700 19px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-history-controls {
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr auto; gap: 12px; align-items: end;
+    margin-bottom: 18px; padding: 16px; border: 1px solid var(--tlali-line); border-radius: 16px; background: white;
+  }
+  #tlali-dashboard .tlali-history-controls label span { display: block; margin-bottom: 5px; color: var(--tlali-muted); font-size: 10px; font-weight: 800; }
+  #tlali-dashboard .tlali-history-controls select,
+  #tlali-dashboard .tlali-history-controls input {
+    width: 100%; height: 43px; border: 1px solid var(--tlali-line); border-radius: 10px;
+    padding: 0 11px; color: var(--tlali-ink); background: #fbfcfa;
+  }
+  #tlali-dashboard #tlali-load-history { height: 43px; border-color: var(--tlali-green); color: white; background: var(--tlali-green); }
+  #tlali-dashboard .tlali-chart-card,
+  #tlali-dashboard .tlali-table-card { padding: 20px; border: 1px solid var(--tlali-line); border-radius: 18px; background: white; }
+  #tlali-dashboard .tlali-chart-head p,
+  #tlali-dashboard .tlali-chart-head h3 { margin: 0; }
+  #tlali-dashboard .tlali-chart-head p { color: var(--tlali-muted); font-size: 11px; font-weight: 700; }
+  #tlali-dashboard .tlali-chart-head h3 { margin-top: 2px; font: 800 27px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-chart-head > span { color: var(--tlali-muted); font-size: 11px; }
+  #tlali-dashboard .tlali-chart-wrap { position: relative; height: 330px; margin-top: 14px; }
+  #tlali-dashboard .tlali-history-empty { display: none; padding: 50px 20px; text-align: center; color: var(--tlali-muted); }
+  #tlali-dashboard .tlali-history-empty.is-visible { display: block; }
+  #tlali-dashboard .tlali-table-card { margin-top: 18px; }
+  #tlali-dashboard .tlali-table-title { margin-bottom: 13px; }
+  #tlali-dashboard .tlali-table-title h3 { margin: 0; font: 700 17px "Manrope", sans-serif; }
+  #tlali-dashboard .tlali-table-title span { color: var(--tlali-muted); font-size: 10px; }
+  #tlali-dashboard .tlali-table-scroll { overflow-x: auto; }
+  #tlali-dashboard table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #tlali-dashboard th,
+  #tlali-dashboard td { padding: 11px 12px; border-bottom: 1px solid var(--tlali-line); text-align: left; white-space: nowrap; }
+  #tlali-dashboard th { color: var(--tlali-muted); background: #f6f8f6; font-size: 10px; letter-spacing: .04em; }
+
+  #tlali-dashboard .tlali-error-box { margin: 0 34px 25px; padding: 15px 18px; border: 1px solid #f0cbc8; border-radius: 14px; color: #8e3733; background: #fff0ee; }
+  #tlali-dashboard .tlali-error-box p { margin: 3px 0 0; font-size: 12px; }
+  #tlali-dashboard .tlali-footer {
+    display: flex; justify-content: space-between; gap: 16px; padding: 18px 34px;
+    border-top: 1px solid var(--tlali-line); color: var(--tlali-muted); background: #f7f8f4; font-size: 10px;
+  }
+
+  @media (max-width: 980px) {
+    #tlali-dashboard .tlali-status-grid { grid-template-columns: 1fr 1fr; }
+    #tlali-dashboard .tlali-signal-card { grid-column: 1 / -1; }
+    #tlali-dashboard .tlali-metric-grid { grid-template-columns: repeat(2, 1fr); }
+    #tlali-dashboard .tlali-history-controls { grid-template-columns: 1fr 1fr; }
+    #tlali-dashboard .tlali-quick-links { grid-template-columns: 1fr 1fr; }
+    #tlali-dashboard .tlali-quick-links button:last-child { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 650px) {
+    #tlali-dashboard .tlali-shell { border-radius: 18px; }
+    #tlali-dashboard .tlali-header { align-items: flex-start; padding: 19px; }
+    #tlali-dashboard .tlali-live-pill { max-width: 145px; }
+    #tlali-dashboard .tlali-nav { overflow-x: auto; padding: 9px 14px; }
+    #tlali-dashboard .tlali-nav-button { flex: 0 0 auto; }
+    #tlali-dashboard .tlali-view { padding: 25px 17px 30px; }
+    #tlali-dashboard .tlali-hero { grid-template-columns: 1fr; margin: -25px -17px 27px; padding: 37px 25px; }
+    #tlali-dashboard .tlali-clock-card { min-width: 0; }
+    #tlali-dashboard .tlali-status-grid,
+    #tlali-dashboard .tlali-relay-grid { grid-template-columns: 1fr; }
+    #tlali-dashboard .tlali-signal-card { grid-column: auto; }
+    #tlali-dashboard .tlali-node-highlights { grid-template-columns: 1fr; }
+    #tlali-dashboard .tlali-page-heading { align-items: flex-start; margin: -25px -17px 25px; padding: 30px 23px; }
+    #tlali-dashboard .tlali-metric-grid { grid-template-columns: 1fr 1fr; }
+    #tlali-dashboard .tlali-history-controls { grid-template-columns: 1fr; }
+    #tlali-dashboard .tlali-quick-links,
+    #tlali-dashboard .tlali-dashboard-charts { grid-template-columns: 1fr; }
+    #tlali-dashboard .tlali-quick-links button:last-child,
+    #tlali-dashboard .tlali-mini-chart--wide { grid-column: auto; }
+    #tlali-dashboard .tlali-screen-actions { flex-direction: column; }
+    #tlali-dashboard .tlali-screen-actions button { width: 100%; }
+    #tlali-dashboard .tlali-chart-wrap { height: 265px; }
+    #tlali-dashboard .tlali-footer { flex-direction: column; padding: 16px 19px; }
+  }
+
+  @media (max-width: 430px) {
+    #tlali-dashboard .tlali-brand-mark { width: 42px; height: 42px; }
+    #tlali-dashboard .tlali-brand h1 { font-size: 19px; }
+    #tlali-dashboard .tlali-eyebrow { display: none; }
+    #tlali-dashboard .tlali-live-pill { padding: 7px 9px; font-size: 10px; }
+    #tlali-dashboard .tlali-metric-grid { grid-template-columns: 1fr; }
+    #tlali-dashboard .tlali-section-title { align-items: flex-end; }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  const ROOT = document.getElementById("tlali-dashboard");
+  if (!ROOT || ROOT.dataset.ready === "true") return;
+  ROOT.dataset.ready = "true";
+
+  const FIREBASE_URL = "https://tlali-5edc4-default-rtdb.firebaseio.com";
+  const ACTUAL_URL = `${FIREBASE_URL}/tlali/actual.json`;
+  const POLL_MS = 10000;
+  const ONLINE_AFTER_MS = 120000;
+  const CISTERN = {
+    capacityLiters: 105000,
+    emptyDistanceCm: 350,
+    fullDistanceCm: 19
+  };
+  const PH_CALIBRATION = {
+    v4: 1.33625,
+    v7: 1.10100,
+    v10: 0.77400
+  };
+  const TDS_CALIBRATION = {
+    ecReferenceUsCm: 1413,
+    voltageReferenceV: 1.92760,
+    ppmFactor: 0.5
+  };
+  const NODES = {
+    greenhouse: "tlali-npk-01",
+    actuator: "tlali-actuadores-01"
+  };
+
+  const METRICS = {
+    greenhouse: [
+      { key: "soilMoisturePct", label: "Humedad del suelo", unit: "%", valid: "soil", group: "soil", digits: 1 },
+      { key: "soilTemperatureC", label: "Temperatura del suelo", unit: "°C", valid: "soil", group: "soil", digits: 1 },
+      { key: "conductivityUsCm", label: "Conductividad", unit: "µS/cm", valid: "soil", group: "soil", digits: 0 },
+      { key: "ph", label: "pH del sustrato", unit: "pH", valid: "soil", group: "soil", digits: 2 },
+      { key: "nitrogenMgKg", label: "Nitrógeno", unit: "mg/kg", valid: "soil", group: "soil", digits: 0 },
+      { key: "phosphorusMgKg", label: "Fósforo", unit: "mg/kg", valid: "soil", group: "soil", digits: 0 },
+      { key: "potassiumMgKg", label: "Potasio", unit: "mg/kg", valid: "soil", group: "soil", digits: 0 },
+      { key: "airHumidityPct", label: "Humedad ambiental", unit: "%", valid: "air", group: "air", digits: 1 },
+      { key: "airTemperatureC", label: "Temperatura ambiental", unit: "°C", valid: "air", group: "air", digits: 1 },
+      { key: "lightLux", label: "Luminosidad", unit: "lux", valid: "light", group: "air", digits: 1 }
+    ],
+    actuator: [
+      { key: "cisternLiters", label: "Agua aproximada", unit: "L", valid: "cistern", digits: 0 },
+      { key: "cisternLevelPct", label: "Nivel aproximado", unit: "%", valid: "cistern", digits: 1 },
+      { key: "waterPh", label: "pH del agua", unit: "pH", valid: "phSignal", digits: 2 },
+      { key: "waterEcUsCm", label: "Conductividad del agua", unit: "µS/cm", valid: "tdsSignal", digits: 0 },
+      { key: "waterTdsPpm", label: "TDS del agua", unit: "ppm", valid: "tdsSignal", digits: 0 }
+    ]
+  };
+
+  const state = {
+    actual: {},
+    history: [],
+    chart: null,
+    busy: false,
+    detailHistory: {},
+    detailCharts: {},
+    detailHistoryBusy: false,
+    detailHistoryLoadedAt: 0
+  };
+
+  const $ = (selector) => ROOT.querySelector(selector);
+  const $$ = (selector) => Array.from(ROOT.querySelectorAll(selector));
+
+  function setText(selector, value) {
+    $$(selector).forEach(el => { el.textContent = value; });
+  }
+
+  function valueText(value, metric) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "Sin lectura";
+    const number = Number(value);
+    return `${number.toLocaleString("es-MX", {
+      minimumFractionDigits: metric.digits,
+      maximumFractionDigits: metric.digits
+    })} ${metric.unit}`;
+  }
+
+  function finiteNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function calculateWaterPh(voltage) {
+    const v = finiteNumber(voltage);
+    if (v === null) return null;
+    if (v >= PH_CALIBRATION.v7) {
+      return 7 + (v - PH_CALIBRATION.v7) * (4 - 7) /
+        (PH_CALIBRATION.v4 - PH_CALIBRATION.v7);
+    }
+    return 7 + (v - PH_CALIBRATION.v7) * (10 - 7) /
+      (PH_CALIBRATION.v10 - PH_CALIBRATION.v7);
+  }
+
+  function calculateWaterEcUsCm(voltage) {
+    const v = finiteNumber(voltage);
+    if (v === null) return null;
+    return v * TDS_CALIBRATION.ecReferenceUsCm /
+      TDS_CALIBRATION.voltageReferenceV;
+  }
+
+  function cisternEstimate(reading) {
+    const distances = [
+      { value: finiteNumber(reading?.data?.tank1DistanceCm), valid: reading?.valid?.tank1 },
+      { value: finiteNumber(reading?.data?.tank2DistanceCm), valid: reading?.valid?.tank2 }
+    ]
+      .filter(sensor => sensor.value !== null && sensor.valid !== false)
+      .map(sensor => sensor.value);
+
+    if (!distances.length) {
+      return { liters: null, percent: null, averageDistanceCm: null, sensorsUsed: 0 };
+    }
+    const averageDistanceCm =
+      distances.reduce((total, distance) => total + distance, 0) / distances.length;
+    const measurableRange =
+      CISTERN.emptyDistanceCm - CISTERN.fullDistanceCm;
+    const rawPercent =
+      ((CISTERN.emptyDistanceCm - averageDistanceCm) / measurableRange) * 100;
+    const percent = Math.min(100, Math.max(0, rawPercent));
+    return {
+      percent,
+      liters: CISTERN.capacityLiters * percent / 100,
+      averageDistanceCm,
+      sensorsUsed: distances.length
+    };
+  }
+
+  function metricValue(reading, key) {
+    if (key === "cisternLiters") {
+      return cisternEstimate(reading).liters;
+    }
+    if (key === "cisternLevelPct") {
+      return cisternEstimate(reading).percent;
+    }
+    if (key === "waterPh") {
+      return finiteNumber(reading?.data?.ph) ??
+        calculateWaterPh(reading?.data?.phVoltageV);
+    }
+    if (key === "waterEcUsCm") {
+      return finiteNumber(reading?.data?.ecUsCm) ??
+        calculateWaterEcUsCm(reading?.data?.tdsVoltageV);
+    }
+    if (key === "waterTdsPpm") {
+      const stored = finiteNumber(reading?.data?.tdsPpm);
+      if (stored !== null) return stored;
+      const ec = calculateWaterEcUsCm(reading?.data?.tdsVoltageV);
+      return ec === null ? null : ec * TDS_CALIBRATION.ppmFactor;
+    }
+    return reading?.data?.[key] ?? null;
+  }
+
+  function shortValue(key, value) {
+    const metric = [...METRICS.greenhouse, ...METRICS.actuator].find(item => item.key === key);
+    if (metric) return valueText(value, metric);
+    if (typeof value === "boolean") return value ? "Encendido" : "Apagado";
+    return value ?? "—";
+  }
+
+  function readingDate(reading) {
+    const raw = reading && reading.gateway && reading.gateway.recibidoUtc;
+    if (!raw) return null;
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function humanDate(date) {
+    if (!date) return "Sin fecha";
+    return new Intl.DateTimeFormat("es-MX", {
+      day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit"
+    }).format(date);
+  }
+
+  function isOnline(reading) {
+    const date = readingDate(reading);
+    return date ? Date.now() - date.getTime() <= ONLINE_AFTER_MS : false;
+  }
+
+  function validityErrors(reading, type) {
+    if (!reading || !reading.valid) return ["Sin datos"];
+    const names = type === "greenhouse"
+      ? { soil: "sensor NPK/sustrato", air: "sensor de ambiente", light: "sensor de luz" }
+      : {
+          tank1: "ultrasónico 1",
+          tank2: "ultrasónico 2",
+          phSignal: "sensor de pH",
+          tdsSignal: "sensor TDS"
+        };
+    return Object.entries(names)
+      .filter(([key]) => reading.valid[key] !== true)
+      .map(([, label]) => label);
+  }
+
+  function renderMetricCards(container, metrics, reading) {
+    const valid = reading && reading.valid ? { ...reading.valid } : {};
+    valid.cistern = valid.tank1 === true || valid.tank2 === true;
+    container.innerHTML = metrics.map(metric => {
+      const ok = valid[metric.valid] === true;
+      return `
+        <article class="tlali-metric-card">
+          <small>${metric.label}</small>
+          <strong class="tlali-metric-value">${valueText(metricValue(reading, metric.key), metric)}</strong>
+          <span class="tlali-metric-status ${ok ? "" : "is-error"}">${ok ? "Lectura válida" : "Revisar sensor"}</span>
+        </article>`;
+    }).join("");
+  }
+
+  function renderNodeStatus(nodeId, reading) {
+    const online = isOnline(reading);
+    $$(`[data-node-state="${nodeId}"]`).forEach(el => {
+      el.classList.remove("is-online", "is-stale");
+      if (!reading) {
+        el.textContent = "Sin datos";
+      } else if (online) {
+        el.classList.add("is-online");
+        el.textContent = "En línea";
+      } else {
+        el.classList.add("is-stale");
+        el.textContent = "Sin actualización";
+      }
+    });
+    setText(`[data-updated="${nodeId}"]`, humanDate(readingDate(reading)));
+  }
+
+  function renderAlerts(greenhouse, actuator) {
+    const failures = [
+      ...validityErrors(greenhouse, "greenhouse"),
+      ...validityErrors(actuator, "actuator")
+    ].filter(item => item !== "Sin datos");
+    const box = $("#tlali-alerts");
+    if (!greenhouse && !actuator) {
+      box.classList.remove("has-error");
+      box.innerHTML = `<span class="tlali-alert-icon">…</span><div><strong>Esperando información</strong><p>Todavía no se reciben datos de los nodos.</p></div>`;
+    } else if (failures.length) {
+      box.classList.add("has-error");
+      box.innerHTML = `<span class="tlali-alert-icon">!</span><div><strong>Revisión necesaria</strong><p>Checar: ${failures.join(", ")}.</p></div>`;
+    } else {
+      box.classList.remove("has-error");
+      box.innerHTML = `<span class="tlali-alert-icon">✓</span><div><strong>Todos los sensores reportan correctamente</strong><p>No se detectan fallas en las últimas tramas recibidas.</p></div>`;
+    }
+  }
+
+  function renderRadio(greenhouse, actuator) {
+    const candidates = [greenhouse, actuator].filter(Boolean).sort((a, b) => {
+      return (readingDate(b)?.getTime() || 0) - (readingDate(a)?.getTime() || 0);
+    });
+    const radio = candidates[0] && candidates[0].radio;
+    if (!radio) return;
+    const rssi = Number(radio.rssiDbm);
+    const snr = Number(radio.snrDb);
+    let bars = 1;
+    if (rssi >= -115) bars = 2;
+    if (rssi >= -105) bars = 3;
+    if (rssi >= -90) bars = 4;
+    if (rssi >= -75) bars = 5;
+    $$("#tlali-signal-bars i").forEach((bar, index) => bar.classList.toggle("is-on", index < bars));
+    $("#tlali-rssi").textContent = Number.isFinite(rssi) ? `${rssi.toFixed(1)} dBm` : "—";
+    $("#tlali-snr").textContent = Number.isFinite(snr) ? `${snr.toFixed(1)} dB` : "—";
+    $("#tlali-signal-title").textContent = bars >= 4 ? "Señal excelente" : bars === 3 ? "Señal estable" : "Señal débil";
+  }
+
+  function renderCurrent() {
+    const greenhouse = state.actual[NODES.greenhouse];
+    const actuator = state.actual[NODES.actuator];
+
+    renderNodeStatus(NODES.greenhouse, greenhouse);
+    renderNodeStatus(NODES.actuator, actuator);
+    renderMetricCards($("#tlali-greenhouse-soil"), METRICS.greenhouse.filter(item => item.group === "soil"), greenhouse);
+    renderMetricCards($("#tlali-greenhouse-air"), METRICS.greenhouse.filter(item => item.group === "air"), greenhouse);
+    renderMetricCards($("#tlali-actuator-metrics"), METRICS.actuator, actuator);
+    renderAlerts(greenhouse, actuator);
+    renderRadio(greenhouse, actuator);
+
+    const greenData = greenhouse?.data || {};
+    ["soilMoisturePct", "airTemperatureC", "lightLux"].forEach(key => setText(`[data-current="${key}"]`, shortValue(key, greenData[key])));
+    ["cisternLiters", "waterPh", "waterTdsPpm"].forEach(key =>
+      setText(`[data-current="${key}"]`, shortValue(key, metricValue(actuator, key)))
+    );
+    setText('[data-current="relay1On"]', actuator?.data?.relay1On === undefined ? "—" : actuator.data.relay1On ? "Encendido" : "Apagado");
+
+    setText('[data-meta="greenhouse-seq"]', greenhouse?.seq ?? "—");
+    setText('[data-meta="greenhouse-rssi"]', greenhouse?.radio ? `${greenhouse.radio.rssiDbm} dBm` : "—");
+    setText('[data-meta="greenhouse-snr"]', greenhouse?.radio ? `${greenhouse.radio.snrDb} dB` : "—");
+    setText('[data-meta="actuator-seq"]', actuator?.seq ?? "—");
+    setText('[data-meta="actuator-rssi"]', actuator?.radio ? `${actuator.radio.rssiDbm} dBm` : "—");
+    setText('[data-meta="actuator-snr"]', actuator?.radio ? `${actuator.radio.snrDb} dB` : "—");
+
+    [
+      [NODES.greenhouse, validityErrors(greenhouse, "greenhouse")],
+      [NODES.actuator, validityErrors(actuator, "actuator")]
+    ].forEach(([node, errors]) => {
+      const el = $(`[data-errors="${node}"]`);
+      if (!el) return;
+      const realErrors = errors.filter(item => item !== "Sin datos");
+      el.textContent = !state.actual[node] ? "Esperando nodo" : realErrors.length ? `${realErrors.length} alerta(s)` : "Sensores OK";
+      el.classList.toggle("has-error", realErrors.length > 0);
+    });
+
+    ["relay1On", "relay2On"].forEach(key => {
+      const on = actuator?.data?.[key] === true;
+      const card = $(`[data-relay-card="${key}"]`);
+      card.classList.toggle("is-on", on);
+      setText(`[data-relay="${key}"]`, actuator?.data?.[key] === undefined ? "Sin datos" : on ? "Encendido" : "Apagado");
+    });
+
+    const connected = Boolean(greenhouse || actuator);
+    const status = $("#tlali-global-status");
+    status.classList.toggle("is-online", connected);
+    status.innerHTML = `<span class="tlali-live-dot"></span><span>${connected ? "Datos recibidos" : "Sin datos"}</span>`;
+  }
+
+  async function fetchJson(url) {
+    const response = await fetch(`${url}${url.includes("?") ? "&" : "?"}_=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) {
+      let detail = "";
+      try { detail = (await response.json()).error || ""; } catch (_) {}
+      throw new Error(`${response.status} ${response.statusText}${detail ? `: ${detail}` : ""}`);
+    }
+    return response.json();
+  }
+
+  async function loadCurrent() {
+    if (state.busy) return;
+    state.busy = true;
+    try {
+      state.actual = (await fetchJson(ACTUAL_URL)) || {};
+      renderCurrent();
+      loadDetailHistories();
+      $("#tlali-error-box").hidden = true;
+    } catch (error) {
+      $("#tlali-error-box").hidden = false;
+      $("#tlali-error-message").textContent =
+        `${error.message}. Comprueba que Realtime Database permita lectura pública temporal en /tlali.`;
+      const status = $("#tlali-global-status");
+      status.classList.remove("is-online");
+      status.innerHTML = `<span class="tlali-live-dot"></span><span>Error de conexión</span>`;
+    } finally {
+      state.busy = false;
+    }
+  }
+
+  function chartDataset(key, label, color) {
+    return {
+      key,
+      label,
+      borderColor: color,
+      backgroundColor: `${color}1A`,
+      borderWidth: 2.4,
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      tension: .28,
+      fill: false,
+      spanGaps: true
+    };
+  }
+
+  function renderMultiChart(canvasId, rows, definitions, unit) {
+    if (!window.Chart) return;
+    const canvas = $(`#${canvasId}`);
+    if (!canvas) return;
+    if (state.detailCharts[canvasId]) state.detailCharts[canvasId].destroy();
+
+    const labels = rows.map(row => {
+      const date = readingDate(row);
+      return date
+        ? date.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })
+        : row.minute?.replace("-", ":") || "";
+    });
+    const datasets = definitions.map(definition => ({
+      ...definition,
+      data: rows.map(row => metricValue(row, definition.key))
+    }));
+
+    state.detailCharts[canvasId] = new Chart(canvas, {
+      type: "line",
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 350 },
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+            labels: { usePointStyle: true, boxWidth: 7, color: "#506760" }
+          },
+          tooltip: {
+            callbacks: {
+              label: context => `${context.dataset.label}: ${
+                context.raw === null ? "Sin lectura" : Number(context.raw).toLocaleString("es-MX")
+              } ${unit}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { maxTicksLimit: 9, color: "#6c7f78", maxRotation: 0 }
+          },
+          y: {
+            grid: { color: "rgba(24,53,47,.07)" },
+            ticks: { color: "#6c7f78" },
+            title: { display: true, text: unit, color: "#6c7f78" }
+          }
+        }
+      }
+    });
+  }
+
+  function renderDetailCharts() {
+    const greenhouseRows = state.detailHistory[NODES.greenhouse] || [];
+    const actuatorRows = state.detailHistory[NODES.actuator] || [];
+
+    renderMultiChart("tlali-chart-humidity", greenhouseRows, [
+      chartDataset("soilMoisturePct", "Suelo", "#2f8a68"),
+      chartDataset("airHumidityPct", "Ambiente", "#256b7a")
+    ], "%");
+    renderMultiChart("tlali-chart-temperature", greenhouseRows, [
+      chartDataset("soilTemperatureC", "Suelo", "#ca7a34"),
+      chartDataset("airTemperatureC", "Ambiente", "#c9524f")
+    ], "°C");
+    renderMultiChart("tlali-chart-npk", greenhouseRows, [
+      chartDataset("nitrogenMgKg", "Nitrógeno", "#2f8a68"),
+      chartDataset("phosphorusMgKg", "Fósforo", "#d69b2d"),
+      chartDataset("potassiumMgKg", "Potasio", "#7358a5")
+    ], "mg/kg");
+
+    renderMultiChart("tlali-chart-tanks", actuatorRows, [
+      chartDataset("cisternLiters", "Agua estimada", "#256b7a")
+    ], "L");
+    renderMultiChart("tlali-chart-water-ph", actuatorRows, [
+      chartDataset("waterPh", "pH", "#7358a5")
+    ], "pH");
+    renderMultiChart("tlali-chart-water-tds", actuatorRows, [
+      chartDataset("waterTdsPpm", "TDS", "#256b7a")
+    ], "ppm");
+  }
+
+  async function loadDetailHistories(force = false) {
+    const now = Date.now();
+    if (
+      state.detailHistoryBusy ||
+      (!force && now - state.detailHistoryLoadedAt < 60000)
+    ) return;
+    state.detailHistoryBusy = true;
+    const date = new Date().toISOString().slice(0, 10);
+    try {
+      const results = await Promise.all([
+        fetchJson(`${FIREBASE_URL}/tlali/historial/${NODES.greenhouse}/${date}.json`),
+        fetchJson(`${FIREBASE_URL}/tlali/historial/${NODES.actuator}/${date}.json`)
+      ]);
+      state.detailHistory[NODES.greenhouse] = flattenHistory(results[0]);
+      state.detailHistory[NODES.actuator] = flattenHistory(results[1]);
+      state.detailHistoryLoadedAt = Date.now();
+      renderDetailCharts();
+    } catch (error) {
+      console.warn("TLALI: no se pudieron cargar las gráficas del día", error);
+    } finally {
+      state.detailHistoryBusy = false;
+    }
+  }
+
+  function optionsForNode() {
+    const type = $("#tlali-history-node").value === NODES.greenhouse ? "greenhouse" : "actuator";
+    const select = $("#tlali-history-variable");
+    select.innerHTML = METRICS[type].map(metric =>
+      `<option value="${metric.key}">${metric.label} (${metric.unit})</option>`
+    ).join("");
+  }
+
+  function flattenHistory(raw) {
+    return Object.entries(raw || {}).map(([minute, reading]) => ({ minute, ...reading })).sort((a, b) => a.minute.localeCompare(b.minute));
+  }
+
+  function historyColumns(node) {
+    return node === NODES.greenhouse ? METRICS.greenhouse : METRICS.actuator;
+  }
+
+  function renderHistory() {
+    const node = $("#tlali-history-node").value;
+    const key = $("#tlali-history-variable").value;
+    const metric = historyColumns(node).find(item => item.key === key);
+    const rows = state.history;
+    const labels = rows.map(row => {
+      const date = readingDate(row);
+      return date ? date.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) : row.minute.replace("-", ":");
+    });
+    const values = rows.map(row => metricValue(row, key));
+    const finiteValues = values.filter(value => value !== null && Number.isFinite(Number(value))).map(Number);
+    const latest = finiteValues.length ? finiteValues[finiteValues.length - 1] : null;
+
+    $("#tlali-chart-label").textContent = metric ? metric.label : "Variable";
+    $("#tlali-chart-value").textContent = metric ? valueText(latest, metric) : "—";
+    $("#tlali-history-count").textContent = `${rows.length} registro${rows.length === 1 ? "" : "s"}`;
+    $("#tlali-history-empty").classList.toggle("is-visible", rows.length === 0);
+    $(".tlali-chart-wrap").style.display = rows.length ? "block" : "none";
+
+    if (state.chart) state.chart.destroy();
+    if (rows.length && window.Chart) {
+      state.chart = new Chart($("#tlali-history-chart"), {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: metric.label,
+            data: values,
+            borderColor: "#2f8a68",
+            backgroundColor: "rgba(47,138,104,.12)",
+            borderWidth: 2.5,
+            pointRadius: rows.length > 80 ? 0 : 2,
+            pointHoverRadius: 5,
+            tension: .3,
+            fill: true,
+            spanGaps: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: context => `${metric.label}: ${valueText(context.raw, metric)}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { maxTicksLimit: 12, color: "#6c7f78" } },
+            y: { grid: { color: "rgba(24,53,47,.08)" }, ticks: { color: "#6c7f78" }, title: { display: true, text: metric.unit } }
+          }
+        }
+      });
+    }
+
+    const columns = historyColumns(node);
+    $("#tlali-history-head").innerHTML = `<th>Hora</th>${columns.map(item => `<th>${item.label}</th>`).join("")}<th>Estado</th>`;
+    $("#tlali-history-body").innerHTML = rows.slice().reverse().slice(0, 25).map(row => {
+      const errors = node === NODES.greenhouse ? validityErrors(row, "greenhouse") : validityErrors(row, "actuator");
+      const time = readingDate(row)?.toLocaleTimeString("es-MX") || row.minute.replace("-", ":");
+      return `<tr>
+        <td>${time}</td>
+        ${columns.map(item => `<td>${valueText(metricValue(row, item.key), item)}</td>`).join("")}
+        <td>${errors.length ? "Revisar" : "OK"}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  async function loadHistory() {
+    const node = $("#tlali-history-node").value;
+    const date = $("#tlali-history-date").value;
+    if (!date) return;
+    const button = $("#tlali-load-history");
+    button.disabled = true;
+    button.textContent = "Consultando…";
+    try {
+      const url = `${FIREBASE_URL}/tlali/historial/${encodeURIComponent(node)}/${date}.json`;
+      state.history = flattenHistory(await fetchJson(url));
+      renderHistory();
+      $("#tlali-error-box").hidden = true;
+    } catch (error) {
+      state.history = [];
+      renderHistory();
+      $("#tlali-error-box").hidden = false;
+      $("#tlali-error-message").textContent = `Historial: ${error.message}`;
+    } finally {
+      button.disabled = false;
+      button.textContent = "Consultar";
+    }
+  }
+
+  function csvCell(value) {
+    const text = value === null || value === undefined ? "" : String(value);
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
+  function exportCsv() {
+    const node = $("#tlali-history-node").value;
+    const columns = historyColumns(node);
+    if (!state.history.length) {
+      alert("Primero consulta una fecha que tenga registros.");
+      return;
+    }
+    const header = ["recibidoUtc", "nodo", ...columns.map(item => item.key), ...Object.keys(state.history[0].valid || {}).map(key => `valid_${key}`)];
+    const lines = [header.map(csvCell).join(",")];
+    state.history.forEach(row => {
+      const values = [
+        row.gateway?.recibidoUtc || "",
+        row.node || node,
+        ...columns.map(item => metricValue(row, item.key)),
+        ...Object.keys(row.valid || {}).map(key => row.valid[key])
+      ];
+      lines.push(values.map(csvCell).join(","));
+    });
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `tlali_${node}_${$("#tlali-history-date").value}.csv`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function switchView(view) {
+    $$(".tlali-nav-button").forEach(button => button.classList.toggle("is-active", button.dataset.view === view));
+    $$(".tlali-view").forEach(panel => panel.classList.toggle("is-active", panel.dataset.panel === view));
+    if (view === "historial" && !state.history.length) loadHistory();
+    if (view === "invernadero" || view === "actuadores") {
+      loadDetailHistories();
+      setTimeout(() => {
+        Object.values(state.detailCharts).forEach(chart => chart.resize());
+      }, 80);
+    }
+  }
+
+  $$(".tlali-nav-button").forEach(button => button.addEventListener("click", () => switchView(button.dataset.view)));
+  $$("[data-view-target]").forEach(button => button.addEventListener("click", () => switchView(button.dataset.viewTarget)));
+  $$("[data-history-node]").forEach(button => button.addEventListener("click", () => {
+    $("#tlali-history-node").value = button.dataset.historyNode;
+    optionsForNode();
+    state.history = [];
+    switchView("historial");
+    loadHistory();
+  }));
+  $$("[data-refresh]").forEach(button => button.addEventListener("click", loadCurrent));
+  $("#tlali-history-node").addEventListener("change", () => { optionsForNode(); state.history = []; });
+  $("#tlali-load-history").addEventListener("click", loadHistory);
+  $("#tlali-export-csv").addEventListener("click", exportCsv);
+
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  $("#tlali-history-date").value = todayUtc;
+  optionsForNode();
+
+  function updateClock() {
+    const now = new Date();
+    $("#tlali-clock").textContent = now.toLocaleTimeString("es-MX");
+    $("#tlali-date").textContent = now.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+  loadCurrent();
+  setInterval(loadCurrent, POLL_MS);
+})();
+</script>

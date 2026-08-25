@@ -1,0 +1,15 @@
+[Unit]
+Description=Receptor LoRa TLALI por USB
+After=local-fs.target
+
+[Service]
+Type=simple
+User=orangepi
+Group=dialout
+WorkingDirectory=/home/orangepi/tlali/orange-pi
+ExecStart=/home/orangepi/tlali/orange-pi/.venv/bin/python /home/orangepi/tlali/orange-pi/recibir_lora.py /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0 --db /home/orangepi/tlali/orange-pi/datos/tlali.db
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

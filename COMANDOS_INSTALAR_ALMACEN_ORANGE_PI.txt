@@ -1,0 +1,34 @@
+==================== WINDOWS POWERSHELL ====================
+
+scp "C:\Users\nahum\Tlali\tlali-orange-pi-almacen-local.zip" "C:\Users\nahum\Tlali\COMANDOS_INSTALAR_ALMACEN_ORANGE_PI.txt" orangepi@192.168.1.77:/home/orangepi/
+
+
+======================== ORANGE PI =========================
+
+cd /home/orangepi
+
+mkdir -p /home/orangepi/tlali-almacen
+
+unzip -o /home/orangepi/tlali-orange-pi-almacen-local.zip -d /home/orangepi/tlali-almacen
+
+cd /home/orangepi/tlali-almacen
+
+chmod +x instalar_almacen_local.sh
+
+./instalar_almacen_local.sh
+
+
+======================== VERIFICAR =========================
+
+cd /home/orangepi/tlali/orange-pi
+
+systemctl status tlali-lora.service --no-pager
+
+.venv/bin/python consultar_datos.py --ultimas 10
+
+journalctl -u tlali-lora.service -f
+
+
+====================== SALIR DE LOGS ========================
+
+Ctrl+C

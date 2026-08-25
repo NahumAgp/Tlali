@@ -1,0 +1,53 @@
+MONITOR HDMI LOCAL PARA LA ORANGE PI
+====================================
+
+La aplicación es nativa en Python/Tkinter:
+- no usa navegador;
+- no necesita Internet;
+- lee directamente datos/tlali.db;
+- actualiza cada 3 segundos;
+- se abre en pantalla completa;
+- muestra resumen, invernadero, actuadores e historial reciente;
+- se inicia automáticamente al entrar al escritorio de la Orange Pi.
+
+ARCHIVO A ENVIAR
+----------------
+
+  tlali-monitor-local.zip
+
+Envíalo a /home/orangepi/ mediante SSH, como los instaladores anteriores.
+
+INSTALAR EN LA ORANGE PI
+------------------------
+
+  mkdir -p /home/orangepi/tlali-monitor-instalador
+  unzip -o /home/orangepi/tlali-monitor-local.zip -d /home/orangepi/tlali-monitor-instalador
+  cd /home/orangepi/tlali-monitor-instalador
+  chmod +x instalar_monitor_local.sh
+  ./instalar_monitor_local.sh
+
+Si solicita contraseña, escribe la contraseña del usuario orangepi.
+
+ABRIRLO AHORA
+-------------
+Ejecuta este comando desde la terminal que se ve en la pantalla HDMI:
+
+  /usr/bin/python3 /home/orangepi/tlali/orange-pi/monitor_local.py --db /home/orangepi/tlali/orange-pi/datos/tlali.db
+
+Si se ejecuta mediante SSH y la sesión gráfica ya está abierta:
+
+  DISPLAY=:0 /usr/bin/python3 /home/orangepi/tlali/orange-pi/monitor_local.py --db /home/orangepi/tlali/orange-pi/datos/tlali.db
+
+CONTROLES
+---------
+- Esc: cerrar.
+- F11: entrar o salir de pantalla completa.
+- Las pestañas superiores cambian de sección.
+
+DESACTIVAR EL INICIO AUTOMÁTICO
+-------------------------------
+
+  rm /home/orangepi/.config/autostart/tlali-monitor.desktop
+
+La aplicación también deja un acceso directo llamado TLALI-Monitor en el
+escritorio.

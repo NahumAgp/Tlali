@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=TLALI Monitor Local
+Comment=Panel HDMI local para los nodos TLALI
+Exec=/usr/bin/python3 /home/orangepi/tlali/orange-pi/monitor_local.py --db /home/orangepi/tlali/orange-pi/datos/tlali.db
+Icon=utilities-system-monitor
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
+X-LXDE-Autostart-enabled=true
+

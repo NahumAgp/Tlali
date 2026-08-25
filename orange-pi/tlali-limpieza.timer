@@ -1,0 +1,11 @@
+[Unit]
+Description=Ejecuta diariamente la limpieza SQLite de TLALI
+
+[Timer]
+OnCalendar=*-*-* 03:20:00
+RandomizedDelaySec=20m
+Persistent=true
+Unit=tlali-limpieza.service
+
+[Install]
+WantedBy=timers.target
