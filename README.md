@@ -38,8 +38,18 @@ docker stack deploy --prune -c .stack.rendered.yml tlali
 rm -f .stack.rendered.yml
 ```
 
-Define `TLALI_HOST` en `.env` para usar un dominio distinto al host HTTPS
-temporal incluido en el stack. El servidor debe conservar `.env` fuera de Git.
+El dominio de produccion predeterminado es `monitoreo.tlali.tech`; se puede
+reemplazar con `TLALI_HOST` en `.env`. El DNS debe apuntar a la IP publica del
+servidor. Traefik solicita y renueva automaticamente el certificado HTTPS con
+su resolver de Let's Encrypt, por lo que no se debe ejecutar Certbot en los
+puertos 80/443 del mismo servidor. El servidor debe conservar `.env` fuera de
+Git.
+
+El backend usa Firebase sólo para el estado en tiempo real. El historial se
+importa de forma idempotente a MySQL y todas las consultas históricas, incluido
+el agente IA, se sirven desde MySQL. Activa `TLALI_FIREBASE_CLEANUP_ENABLED`
+únicamente después de verificar la primera importación; cada lote de Firebase
+se elimina sólo cuando todas sus lecturas ya están confirmadas en MySQL.
 
 ## Ejecutar en local
 
