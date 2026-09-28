@@ -14,13 +14,63 @@ Este repo contiene la documentacion general, archivos de entorno de ejemplo, con
 Tlali Tlapixqui incluye login local con JWT, Google OAuth y un usuario superadmin inicial para desarrollo.
 
 ```text
-Correo: superadmin@tlali.local
-Password: SuperAdmin123!
+Correo: nahum.aguilar.per@gmail.com
+Password: Admin123!
 ```
 
 Antes de produccion cambia `TLALI_SUPERADMIN_PASSWORD` y `TLALI_JWT_SECRET`.
 
 ## Ejecutar en local
+
+### Con Docker Compose
+
+La forma mas simple para correr Tlali completo en esta PC es con Docker Desktop:
+
+```powershell
+copy .env.example .env
+docker compose up --build -d
+```
+
+Servicios:
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+- MySQL: disponible solo dentro de Docker como `mysql:3306`
+
+Credenciales locales por defecto:
+
+```text
+Correo: nahum.aguilar.per@gmail.com
+Password: Admin123!
+```
+
+Para ver estado y logs:
+
+```powershell
+docker compose ps
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+Para abrir una consola MySQL dentro del contenedor:
+
+```powershell
+docker compose exec mysql mysql -utlali -ptlali tlali
+```
+
+Para apagar sin borrar datos:
+
+```powershell
+docker compose down
+```
+
+Para apagar y borrar la base local de MySQL:
+
+```powershell
+docker compose down -v
+```
+
+### Sin Docker
 
 Supabase local usa Docker para levantar Postgres, Auth, API y Studio. Primero abre Docker Desktop y espera a que el motor este corriendo.
 
