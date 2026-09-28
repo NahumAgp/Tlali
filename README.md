@@ -20,6 +20,25 @@ Password: Admin123!
 
 Antes de produccion cambia `TLALI_SUPERADMIN_PASSWORD` y `TLALI_JWT_SECRET`.
 
+## Despliegue en Docker Swarm
+
+El archivo `docker-stack.yml` despliega Tlali detrás de Traefik en la red
+externa `VanaNet`. Docker Swarm no construye imágenes, por lo que primero se
+deben construir el backend y el frontend desde el código descargado de GitHub.
+
+```bash
+git pull --ff-only
+git submodule update --init --recursive
+docker build -t tlali-backend:latest ./tlali-back
+docker build -t tlali-frontend:latest ./tlali-front
+docker compose --env-file .env -f docker-stack.yml config > .stack.rendered.yml
+docker stack deploy --prune -c .stack.rendered.yml tlali
+rm -f .stack.rendered.yml
+```
+
+Define `TLALI_HOST` en `.env` para usar un dominio distinto al host HTTPS
+temporal incluido en el stack. El servidor debe conservar `.env` fuera de Git.
+
 ## Ejecutar en local
 
 ### Con Docker Compose

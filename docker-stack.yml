@@ -1,0 +1,89 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tlali}
+      MYSQL_USER: ${MYSQL_USER:-tlali}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      update_config:
+        order: stop-first
+
+  backend:
+    image: ${TLALI_BACKEND_IMAGE:-tlali-backend:latest}
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-tlali}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-tlali}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-update}
+      TLALI_JWT_SECRET: ${TLALI_JWT_SECRET}
+      TLALI_JWT_EXPIRES_IN_MINUTES: ${TLALI_JWT_EXPIRES_IN_MINUTES:-720}
+      TLALI_FRONTEND_AUTH_CALLBACK: https://${TLALI_HOST:-tlali.5.183.9.146.nip.io}/auth/callback
+      TLALI_SUPERADMIN_EMAIL: ${TLALI_SUPERADMIN_EMAIL:-nahum.aguilar.per@gmail.com}
+      TLALI_SUPERADMIN_PASSWORD: ${TLALI_SUPERADMIN_PASSWORD}
+      TLALI_SUPERADMIN_NAME: ${TLALI_SUPERADMIN_NAME:-Nahum Aguilar}
+      TLALI_DEVICE_API_KEY: ${TLALI_DEVICE_API_KEY}
+      TLALI_FIREBASE_DATABASE_URL: ${TLALI_FIREBASE_DATABASE_URL:-https://tlali-5edc4-default-rtdb.firebaseio.com}
+      TLALI_FIREBASE_HISTORY_SYNC_ENABLED: ${TLALI_FIREBASE_HISTORY_SYNC_ENABLED:-true}
+      TLALI_FIREBASE_HISTORY_SYNC_FIXED_DELAY_MS: ${TLALI_FIREBASE_HISTORY_SYNC_FIXED_DELAY_MS:-30000}
+      TLALI_FIREBASE_CLEANUP_ENABLED: ${TLALI_FIREBASE_CLEANUP_ENABLED:-false}
+      TLALI_FIREBASE_CLEANUP_RETENTION_DAYS: ${TLALI_FIREBASE_CLEANUP_RETENTION_DAYS:-2}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      TLALI_OPENAI_MODEL: ${TLALI_OPENAI_MODEL:-gpt-5-mini}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID:-}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET:-}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_SCOPE:-openid,profile,email}
+    networks:
+      - internal
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      update_config:
+        order: start-first
+        failure_action: rollback
+
+  frontend:
+    image: ${TLALI_FRONTEND_IMAGE:-tlali-frontend:latest}
+    networks:
+      - internal
+      - public
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      update_config:
+        order: start-first
+        failure_action: rollback
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=VanaNet
+        - traefik.http.routers.tlali.rule=Host(`${TLALI_HOST:-tlali.5.183.9.146.nip.io}`)
+        - traefik.http.routers.tlali.entrypoints=websecure
+        - traefik.http.routers.tlali.tls.certresolver=letsencryptresolver
+        - traefik.http.services.tlali.loadbalancer.server.port=80
+
+volumes:
+  mysql_data:
+
+networks:
+  internal:
+    driver: overlay
+  public:
+    external: true
+    name: VanaNet
