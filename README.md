@@ -50,6 +50,7 @@ importa de forma idempotente a MySQL y todas las consultas históricas, incluido
 el agente IA, se sirven desde MySQL. Activa `TLALI_FIREBASE_CLEANUP_ENABLED`
 únicamente después de verificar la primera importación; cada lote de Firebase
 se elimina sólo cuando todas sus lecturas ya están confirmadas en MySQL.
+MySQL conserva una muestra por nodo y tipo en cada bloque de 30 minutos.
 
 ## Ejecutar en local
 
