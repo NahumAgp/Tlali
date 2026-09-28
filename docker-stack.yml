@@ -61,7 +61,7 @@ services:
     image: ${TLALI_FRONTEND_IMAGE:-tlali-frontend:latest}
     networks:
       - internal
-      - public
+      - VanaNet
     deploy:
       replicas: 1
       restart_policy:
@@ -84,6 +84,5 @@ volumes:
 networks:
   internal:
     driver: overlay
-  public:
+  VanaNet:
     external: true
-    name: VanaNet
