@@ -32,6 +32,8 @@ git submodule update --init --recursive
 docker build -t tlali-backend:latest ./tlali-back
 docker build -t tlali-frontend:latest ./tlali-front
 docker compose --env-file .env -f docker-stack.yml config > .stack.rendered.yml
+sed -i '/^[[:space:]]*name: /d' .stack.rendered.yml
+docker stack config -c .stack.rendered.yml > /dev/null
 docker stack deploy --prune -c .stack.rendered.yml tlali
 rm -f .stack.rendered.yml
 ```
